@@ -19,7 +19,18 @@ Using randint to pick a starting point on the board (between 1 and 10, minus the
 
 Our check_overlap() function loops through our coordinates and checks whether [any()](https://www.geeksforgeeks.org/python-any-function/) of the coordinates are already present in the given ship list. If so, we'll send that ship back through the add_ships() function to create new coordinates. If not, we'll append the coordinates to the ship lists and print the ships to the board. We'll be using our ship list to check our inputs against, rather than reading the board itself.
 
+### User & comp moves, updating board:
+get_user_move() function prompts user for row number and column letter inputs with simple while loops to check whether input is "not in" the accepted answers. get_comp_move() generates random row and column numbers, and converts column number to character.
 
+Both functions create tuples from the inputs/generated coordinates and pass those, plus the enemy's ship list, board, and the player variable (set to True in the user's function) to check_hit().
+
+The check_hit() function then loops through each of the ships in given ship list, checks if the move is within that ship (which is itself a list of tuples), and then checks the length of the ship. If there's only one coordinate left in the ship, you sunk a battleship! Otherwise, we'll remove the matching coordinates, so shortening the ship.
+
+After that, it prints the moves and updates the boards accordingly, with an "X" for a hit and an "O" for a miss.
+
+We also update the main() function to include a while loop to get our inputs and print our boards as they're updated.
+
+Could probably make the computer function a little smarter. What if the last move hit a ship? Should the computer then look in neighbouring cells for further hits?? Otherwise human is always at a massive advantage.
 
 
 
