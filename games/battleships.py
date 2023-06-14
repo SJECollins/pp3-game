@@ -115,7 +115,8 @@ def get_user_move():
     while True:
         while True:
             row_num = input("Enter row number: ").strip()
-            if row_num not in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
+            if row_num not in (
+              "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
                 print("Please enter a valid row number.")
             else:
                 row = int(row_num)
@@ -138,19 +139,58 @@ def get_user_move():
     check_hit(guess, COMP_SHIPS, COMP_BOARD, player)
 
 
-def get_comp_move():
+def get_comp_move(board):
     move = ()
     player = False
+    target = False
+    row_num = 0
+    col_num = 0
+    print(board)
     while True:
-        row = randint(1, 10)
-        move = move + (row, )
-        col_num = randint(1, 10)
+        for row in board:
+            if row_num == 10:
+                row_num = 0
+            row_num += 1
+            col_num = 0
+            print("Row ", row_num)
+            for col in row:
+                col_num += 1
+                print("Col ", col_num)
+                if col == "X":
+                    print("Current row ", row_num)
+                    print("Current col ", col_num)
+                    print("Current position: ", board[row_num][col_num])
+                    if board[row_num - 1][col_num] == " " or board[row_num - 1][col_num] == "$":
+                        row_num -= 1
+                        target = True
+                        break
+                    elif board[row_num + 1][col_num] == " " or board[row_num + 1][col_num] == "$":
+                        row_num += 1
+                        target = True
+                        break
+                    elif board[row_num][col_num - 1] == " " or board[row_num][col_num - 1] == "$":
+                        col_num -= 1
+                        target = True
+                        break
+                    elif board[row_num][col_num + 1] == " " or board[row_num][col_num + 1] == "$":
+                        col_num += 1
+                        target = True
+                        break
+                    else:
+                        continue
+
+        if not target:
+            row_num = randint(1, 10)
+            col_num = randint(1, 10)
+
+        move = move + (row_num, )
         col = chr(col_num + 96)
         move = move + (col, )
+        print(move)
         if move not in COMP_MOVES:
             break
-            
-    check_hit(move, USER_SHIPS, USER_BOARD, player)
+    print("Move ", move)
+    check_hit(move, USER_SHIPS, board, player)
 
 
 def check_hit(move, ships, board, player):
@@ -214,6 +254,6 @@ def main():
     start_game()
     while len(USER_SHIPS) > 0 and len(COMP_SHIPS) > 0:
         get_user_move()
-        get_comp_move()
+        get_comp_move(USER_BOARD)
         print_boards()
     end_game()
