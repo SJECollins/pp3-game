@@ -17,7 +17,9 @@ Using randint to pick a starting point on the board (between 1 and 10, minus the
 - For our columns we also need to convert the random numbers we created to characters using the [chr()](https://www.w3schools.com/python/ref_func_chr.asp) function on the column number plus 96.
 - We'll then create a list (using the [zip()](https://www.w3schools.com/python/ref_func_zip.asp) function to convert our rows & cols to tuples) of our coordinates that we'll pass on to our check_overlap() function
 
-Our check_overlap() function loops through our coordinates and checks whether [any()](https://www.geeksforgeeks.org/python-any-function/) of the coordinates are already present in the given ship list. If so, we'll send that ship back through the add_ships() function to create new coordinates.
+Our check_overlap() function loops through our coordinates and checks whether [any()](https://www.geeksforgeeks.org/python-any-function/) of the coordinates are already present in the given ship list. If so, we'll send that ship back through the add_ships() function to create new coordinates. If not, we'll append the coordinates to the ship lists and print the ships to the board. We'll be using our ship list to check our inputs against, rather than reading the board itself.
+
+
 
 
 

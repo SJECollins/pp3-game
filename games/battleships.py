@@ -100,11 +100,72 @@ def check_overlap(coordinates, ship, ships, is_player):
                 USER_BOARD[row][col] = "$"
         else:
             COMP_SHIPS.append(coordinates)
-            for coords in coordinates:
-                row = coords[0] - 1
-                col_letter = coords[1]
-                col = ord(col_letter) - 97
-                COMP_BOARD[row][col] = "$"
+
+
+def get_user_move():
+    guess = ()
+    player = True
+    print(f"The enemy has {len(COMP_SHIPS)} battleships remaining.", end=" ")
+    print(f"You have {len(USER_SHIPS)} battleships remaining.")
+    print("Enter the coordinates for your missile below!")
+
+    while True:
+        row_num = input("Enter row number: ").strip()
+        if row_num not in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
+            print("Please enter a valid row number.")
+        else:
+            row = int(row_num)
+            guess = guess + (row, )
+            break
+    while True:
+        col = input("Enter column letter: ").strip().lower()
+        if col not in ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
+            print("Please enter a valid column letter.")
+        else:
+            guess = guess + (col, )
+            break
+
+    check_hit(guess, COMP_SHIPS, COMP_BOARD, player)
+
+
+def get_comp_move():
+    move = ()
+    player = False
+    row = randint(1, 10)
+    move = move + (row, )
+    col_num = randint(1, 10)
+    col = chr(col_num + 96)
+    move = move + (col, )
+    check_hit(move, USER_SHIPS, USER_BOARD, player)
+
+
+def check_hit(move, ships, board, player):
+    hit = False
+    for ship in ships:
+        if move in ship:
+            hit = True
+            if len(ship) == 1:
+                ships.remove(ship)
+                if player:
+                    print("You sunk a battleship!")
+                else:
+                    print("You lost a battleship!")
+            else:
+                ship.remove(move)
+    row = move[0] - 1
+    col_letter = move[1]
+    col = ord(col_letter) - 97
+
+    if player:
+        print("Your guess: ", move)
+    else:
+        print("Enemy move: ", move)
+    if hit:
+        board[row][col] = "X"
+        print("Hit!")
+    else:
+        board[row][col] = "O"
+        print("Miss!")
 
 
 def start_game():
@@ -126,3 +187,8 @@ def start_game():
 
 def main():
     start_game()
+    while True:
+        get_user_move()
+        get_comp_move()
+        print_boards()
+
