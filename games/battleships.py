@@ -10,6 +10,9 @@ USER_BOARD = [[" "] * 10 for y in range(10)]
 COMP_SHIPS = []
 USER_SHIPS = []
 
+USER_MOVES = []
+COMP_MOVES = []
+
 
 def print_player(board):
     print("             PLAYER", end="")
@@ -110,20 +113,27 @@ def get_user_move():
     print("Enter the coordinates for your missile below!")
 
     while True:
-        row_num = input("Enter row number: ").strip()
-        if row_num not in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
-            print("Please enter a valid row number.")
-        else:
-            row = int(row_num)
-            guess = guess + (row, )
+        while True:
+            row_num = input("Enter row number: ").strip()
+            if row_num not in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
+                print("Please enter a valid row number.")
+            else:
+                row = int(row_num)
+                guess = guess + (row, )
+                break
+        while True:
+            col = input("Enter column letter: ").strip().lower()
+            if col not in ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
+                print("Please enter a valid column letter.")
+            else:
+                guess = guess + (col, )
+                break
+        if guess not in USER_MOVES:
+            USER_MOVES.append(guess)
             break
-    while True:
-        col = input("Enter column letter: ").strip().lower()
-        if col not in ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
-            print("Please enter a valid column letter.")
         else:
-            guess = guess + (col, )
-            break
+            guess = ()
+            print("You already tried that!")
 
     check_hit(guess, COMP_SHIPS, COMP_BOARD, player)
 
@@ -131,11 +141,15 @@ def get_user_move():
 def get_comp_move():
     move = ()
     player = False
-    row = randint(1, 10)
-    move = move + (row, )
-    col_num = randint(1, 10)
-    col = chr(col_num + 96)
-    move = move + (col, )
+    while True:
+        row = randint(1, 10)
+        move = move + (row, )
+        col_num = randint(1, 10)
+        col = chr(col_num + 96)
+        move = move + (col, )
+        if move not in COMP_MOVES:
+            break
+            
     check_hit(move, USER_SHIPS, USER_BOARD, player)
 
 
@@ -169,6 +183,10 @@ def check_hit(move, ships, board, player):
 
 
 def start_game():
+    print("Welcome to Battleships!")
+    print("When prompted, enter the row number, then column letter for the \
+          coordinates you wish to attack.")
+    print("Destroy all 5 of your enemy's ships to win!")
     user_sizes = [2, 3, 3, 4, 5]
     comp_sizes = [2, 3, 3, 4, 5]
 
@@ -185,10 +203,17 @@ def start_game():
     print_boards()
 
 
+def end_game():
+    if len(USER_SHIPS) < len(COMP_SHIPS):
+        print("You lose!")
+    else:
+        print("You sunk all their battleships!")
+
+
 def main():
     start_game()
-    while True:
+    while len(USER_SHIPS) > 0 and len(COMP_SHIPS) > 0:
         get_user_move()
         get_comp_move()
         print_boards()
-
+    end_game()
