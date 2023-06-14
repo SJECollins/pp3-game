@@ -9,6 +9,7 @@ import pyfiglet
 # Import game
 from games import battleships
 
+
 def run_game(choice):
     if choice == 1:
         battleships.main()
