@@ -32,5 +32,10 @@ We also update the main() function to include a while loop to get our inputs and
 
 Could probably make the computer function a little smarter. What if the last move hit a ship? Should the computer then look in neighbouring cells for further hits?? Otherwise human is always at a massive advantage.
 
+### Prevent user and computer inputting same coordinates multiple times
+So, one thing about checking the ship list vs reading the board, is that there's no way to tell from the ship list if you've already missed on one spot. Obviously the user could read the board, but what's to prevent them entering the same coordinates anyway? And the computer could randomly hit the same spot twice because it's not smart.
 
+Added a parent while loop for inputs and an if statement to check whether the move is within a list of the player/computer's previous moves.
 
+### Endgame
+End game conditions are simple, updated while loop in main() to only run while user AND computer ships are above 0. Once one or the other reaches 0, the loop breaks and we go to our end_game() function.
