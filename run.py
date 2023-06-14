@@ -22,7 +22,8 @@ def menu():
     print("Select a game from the list below: ")
     print("[1] Battleships")
     while True:
-        user_choice = input("Enter the number of the game you want to play: ").strip()
+        user_choice = input(
+            "Enter the number of the game you want to play: ").strip()
         if user_choice not in ("1", "2", "3"):
             print("Please enter a valid number.")
         else:

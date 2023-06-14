@@ -115,7 +115,7 @@ def start_game():
         ship = user_sizes.pop(0)
         is_player = True
         add_ships(ship, USER_SHIPS, is_player)
-    
+
     while len(COMP_SHIPS) < 5:
         ship = comp_sizes.pop(0)
         is_player = False
