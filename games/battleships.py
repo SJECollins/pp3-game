@@ -147,37 +147,38 @@ def get_comp_move(board):
     col_num = 0
     print(board)
     while True:
-        for row in board:
-            if row_num == 10:
-                row_num = 0
-            row_num += 1
-            col_num = 0
-            print("Row ", row_num)
-            for col in row:
-                col_num += 1
-                print("Col ", col_num)
-                if col == "X":
-                    print("Current row ", row_num)
-                    print("Current col ", col_num)
-                    print("Current position: ", board[row_num][col_num])
-                    if board[row_num - 1][col_num] == " " or board[row_num - 1][col_num] == "$":
-                        row_num -= 1
+        for row in range(len(board)):
+            for col in range(len(board[row])):
+                if board[row][col] == "X":
+                    print("Current position: ", row, col)
+                    if board[row - 1][col] == " " or board[row - 1][col] == "$":
+                        row_num = row
+                        col_num = col + 1
                         target = True
+                        print("Target above")
                         break
-                    elif board[row_num + 1][col_num] == " " or board[row_num + 1][col_num] == "$":
-                        row_num += 1
+                    elif board[row + 1][col] == " " or board[row + 1][col] == "$":
+                        row_num = row + 2
+                        col_num = col + 1
                         target = True
+                        print("Target below")
                         break
-                    elif board[row_num][col_num - 1] == " " or board[row_num][col_num - 1] == "$":
-                        col_num -= 1
+                    elif board[row][col - 1] == " " or board[row][col - 1] == "$":
+                        row_num = row + 1
+                        col_num = col
                         target = True
+                        print("Target left")
                         break
-                    elif board[row_num][col_num + 1] == " " or board[row_num][col_num + 1] == "$":
-                        col_num += 1
+                    elif board[row][col + 1] == " " or board[row][col + 1] == "$":
+                        row_num = row + 1
+                        col_num = col + 2
                         target = True
+                        print("Target right")
                         break
                     else:
                         continue
+            if target:
+                break
 
         if not target:
             row_num = randint(1, 10)
