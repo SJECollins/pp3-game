@@ -148,12 +148,23 @@ def get_comp_move(board):
     while True:
         for row in range(len(board)):
             for col in range(len(board[row])):
-                if board[row][col] == "X":
+                if board[row][col] == "H":
                     print("Current position: ", row, col)
-                    # if row < 8 and board[row + 1][col] == "X":
-                    #     break
-                    # elif col < 8 and board[row][col + 1] == "X":
-                    #     continue
+                    if row < 8 and board[row + 1][col] == "H":
+                        if row > 0 and board[row - 1][col] in ("~", "$"):
+                            row_num = row
+                            col_num = col + 1
+                            target = True
+                            print("Target above")
+                        break
+                    elif col < 8 and board[row][col + 1] == "H":
+                        if col > 0 and board[row][col - 1] in ("~", "$"):
+                            row_num = row + 1
+                            col_num = col
+                            target = True
+                            print("Target left")
+                            break
+                        continue
                     if row > 0 and board[row - 1][col] in ("~", "$"):
                         row_num = row
                         col_num = col + 1
@@ -191,7 +202,9 @@ def get_comp_move(board):
         col = chr(col_num + 96)
         move = move + (col, )
         print(COMP_MOVES)
-        if move not in COMP_MOVES:
+        if move in COMP_MOVES:
+            move = ()
+        else:
             break
     COMP_MOVES.append(move)
     print("Move ", move)
@@ -200,17 +213,21 @@ def get_comp_move(board):
 
 def check_hit(move, ships, board, player):
     hit = False
+    sunk = False
+
     for ship in ships:
         if move in ship:
             hit = True
             if len(ship) == 1:
                 ships.remove(ship)
+                sunk = True
                 if player:
                     print("You sunk a battleship!")
                 else:
                     print("You lost a battleship!")
             else:
                 ship.remove(move)
+
     row = move[0] - 1
     col_letter = move[1]
     col = ord(col_letter) - 97
@@ -219,12 +236,23 @@ def check_hit(move, ships, board, player):
         print("Your guess: ", move)
     else:
         print("Enemy move: ", move)
+
     if hit:
-        board[row][col] = "X"
+        board[row][col] = "H"
         print("Hit!")
     else:
         board[row][col] = "O"
         print("Miss!")
+
+    if sunk:
+        sink_ships(board)
+
+
+def sink_ships(board):
+    for row in range(len(board)):
+        for col in range(len(board[row])):
+            if board[row][col] == "H":
+                board[row][col] = "X"
 
 
 def start_game():
