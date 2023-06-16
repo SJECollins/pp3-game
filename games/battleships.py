@@ -4,8 +4,25 @@ Battleships vs computer
 
 from random import randint
 
-COMP_BOARD = [["~"] * 10 for x in range(10)]
-USER_BOARD = [["~"] * 10 for y in range(10)]
+
+class Style():
+    RED = "\033[31m"
+    YELLOW = "\033[33m"
+    BLUE = "\033[34m"
+    GREY = "\033[37m"
+    PURPLE = "\033[35m"
+    END = "\033[0m"
+
+
+sea_icon = f"{Style.BLUE}~{Style.END}"
+boat_icon = f"{Style.GREY}B{Style.END}"
+hit_icon = f"{Style.YELLOW}H{Style.END}"
+sunk_icon = f"{Style.RED}X{Style.END}"
+miss_icon = f"{Style.PURPLE}M{Style.END}"
+
+
+COMP_BOARD = [[sea_icon] * 10 for x in range(10)]
+USER_BOARD = [[sea_icon] * 10 for y in range(10)]
 
 COMP_SHIPS = []
 USER_SHIPS = []
@@ -100,7 +117,7 @@ def check_overlap(coordinates, ship, ships, is_player):
                 row = coords[0] - 1
                 col_letter = coords[1]
                 col = ord(col_letter) - 97
-                USER_BOARD[row][col] = "$"
+                USER_BOARD[row][col] = boat_icon
         else:
             COMP_SHIPS.append(coordinates)
 
@@ -148,42 +165,41 @@ def get_comp_move(board):
     while True:
         for row in range(len(board)):
             for col in range(len(board[row])):
-                if board[row][col] == "H":
-                    print("Current position: ", row, col)
-                    if row < 8 and board[row + 1][col] == "H":
-                        if row > 0 and board[row - 1][col] in ("~", "$"):
+                if board[row][col] == hit_icon:
+                    if row < 8 and board[row + 1][col] == hit_icon:
+                        if row > 0 and board[row - 1][col] in (sea_icon, boat_icon):
                             row_num = row
                             col_num = col + 1
                             target = True
                             print("Target above")
                         break
-                    elif col < 8 and board[row][col + 1] == "H":
-                        if col > 0 and board[row][col - 1] in ("~", "$"):
+                    elif col < 8 and board[row][col + 1] == hit_icon:
+                        if col > 0 and board[row][col - 1] in (sea_icon, boat_icon):
                             row_num = row + 1
                             col_num = col
                             target = True
                             print("Target left")
                             break
                         continue
-                    if row > 0 and board[row - 1][col] in ("~", "$"):
+                    if row > 0 and board[row - 1][col] in (sea_icon, boat_icon):
                         row_num = row
                         col_num = col + 1
                         target = True
                         print("Target above")
                         break
-                    elif row < 8 and board[row + 1][col] in ("~", "$"):
+                    elif row < 8 and board[row + 1][col] in (sea_icon, boat_icon):
                         row_num = row + 2
                         col_num = col + 1
                         target = True
                         print("Target below")
                         break
-                    elif col > 0 and board[row][col - 1] in ("~", "$"):
+                    elif col > 0 and board[row][col - 1] in (sea_icon, boat_icon):
                         row_num = row + 1
                         col_num = col
                         target = True
                         print("Target left")
                         break
-                    elif col < 8 and board[row][col + 1] in ("~", "$"):
+                    elif col < 8 and board[row][col + 1] in (sea_icon, boat_icon):
                         row_num = row + 1
                         col_num = col + 2
                         target = True
@@ -201,13 +217,11 @@ def get_comp_move(board):
         move = move + (row_num, )
         col = chr(col_num + 96)
         move = move + (col, )
-        print(COMP_MOVES)
         if move in COMP_MOVES:
             move = ()
         else:
             break
     COMP_MOVES.append(move)
-    print("Move ", move)
     check_hit(move, USER_SHIPS, board, player)
 
 
@@ -238,10 +252,10 @@ def check_hit(move, ships, board, player):
         print("Enemy move: ", move)
 
     if hit:
-        board[row][col] = "H"
+        board[row][col] = hit_icon
         print("Hit!")
     else:
-        board[row][col] = "O"
+        board[row][col] = miss_icon
         print("Miss!")
 
     if sunk:
@@ -251,8 +265,8 @@ def check_hit(move, ships, board, player):
 def sink_ships(board):
     for row in range(len(board)):
         for col in range(len(board[row])):
-            if board[row][col] == "H":
-                board[row][col] = "X"
+            if board[row][col] == hit_icon:
+                board[row][col] = sunk_icon
 
 
 def start_game():
