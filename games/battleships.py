@@ -4,8 +4,8 @@ Battleships vs computer
 
 from random import randint
 
-COMP_BOARD = [[" "] * 10 for x in range(10)]
-USER_BOARD = [[" "] * 10 for y in range(10)]
+COMP_BOARD = [["~"] * 10 for x in range(10)]
+USER_BOARD = [["~"] * 10 for y in range(10)]
 
 COMP_SHIPS = []
 USER_SHIPS = []
@@ -145,31 +145,34 @@ def get_comp_move(board):
     target = False
     row_num = 0
     col_num = 0
-    print(board)
     while True:
         for row in range(len(board)):
             for col in range(len(board[row])):
                 if board[row][col] == "X":
                     print("Current position: ", row, col)
-                    if board[row - 1][col] == " " or board[row - 1][col] == "$":
+                    # if row < 8 and board[row + 1][col] == "X":
+                    #     break
+                    # elif col < 8 and board[row][col + 1] == "X":
+                    #     continue
+                    if row > 0 and board[row - 1][col] in ("~", "$"):
                         row_num = row
                         col_num = col + 1
                         target = True
                         print("Target above")
                         break
-                    elif board[row + 1][col] == " " or board[row + 1][col] == "$":
+                    elif row < 8 and board[row + 1][col] in ("~", "$"):
                         row_num = row + 2
                         col_num = col + 1
                         target = True
                         print("Target below")
                         break
-                    elif board[row][col - 1] == " " or board[row][col - 1] == "$":
+                    elif col > 0 and board[row][col - 1] in ("~", "$"):
                         row_num = row + 1
                         col_num = col
                         target = True
                         print("Target left")
                         break
-                    elif board[row][col + 1] == " " or board[row][col + 1] == "$":
+                    elif col < 8 and board[row][col + 1] in ("~", "$"):
                         row_num = row + 1
                         col_num = col + 2
                         target = True
@@ -187,9 +190,10 @@ def get_comp_move(board):
         move = move + (row_num, )
         col = chr(col_num + 96)
         move = move + (col, )
-        print(move)
+        print(COMP_MOVES)
         if move not in COMP_MOVES:
             break
+    COMP_MOVES.append(move)
     print("Move ", move)
     check_hit(move, USER_SHIPS, board, player)
 
@@ -226,7 +230,7 @@ def check_hit(move, ships, board, player):
 def start_game():
     print("Welcome to Battleships!")
     print("When prompted, enter the row number, then column letter for the \
-          coordinates you wish to attack.")
+coordinates you wish to attack.")
     print("Destroy all 5 of your enemy's ships to win!")
     user_sizes = [2, 3, 3, 4, 5]
     comp_sizes = [2, 3, 3, 4, 5]
