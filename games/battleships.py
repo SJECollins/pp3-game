@@ -122,6 +122,68 @@ def check_overlap(coordinates, ship, ships, is_player):
             COMP_SHIPS.append(coordinates)
 
 
+def get_user_ship_position(board, user_sizes):
+    row_nums = []
+    col_nums = []
+    col_letters = []
+    for ship in user_sizes:
+        print(f"Placing a ship {ship} cells long.")
+        while True:
+            while True:
+                direction = input("Enter orientation - 'H' for horizontal or 'V' for vertical :").lower()
+                if direction in ("h", "v"):
+                    break
+                else:
+                    print("Please enter a valid orientation.")
+            while True:
+                row = input("Enter the row number for the first cell of the ship: ").strip()
+                if row in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
+                    row_num = int(row) - 1
+                    break
+                else:
+                    print("Please enter a valid row number.")
+            while True:
+                col = input("Enter the column letter for the first cell of the ship: ").strip().lower()
+                if col in ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
+                    col_num = ord(col) - 97
+                    break
+                else:
+                    print("Please enter a valid column letter.")
+            if direction == "h":
+                if col_num + ship < 10:
+                    row_nums = row * ship
+                    col_nums = list(range(col_num, col_num + ship))
+                    for col in col_nums:
+                        if board[row_num][col] == boat_icon:
+                            print("There is already a ship in that position.")
+                        else:
+                            board[row_num][col] = boat_icon
+                            
+                else:
+                    print("The ship does not fit in those coordinates. \
+                          Please enter a valid starting position for the ship.")
+            else:
+                if row_num + ship < 10:
+                    row_nums = list(range(row, row + ship))
+                    col_nums = col * ship    
+                    for row in row_nums:
+                        if board[row][col_num] == boat_icon:
+                            print("There is already a ship in that position.")
+                        else:
+                            board[row][col_num] = boat_icon
+                            
+                else:
+                    print("The ship does not fit in those coordinates. \
+                          Please enter a valid starting position for the ship.")
+        for col in col_nums:
+            col_letter = chr(col + 96)
+            col_letters.append(col_letter)
+        coordinates = list(zip(row_nums, col_letters))
+        USER_SHIPS.append(coordinates)
+        print_boards(board)
+        print(ship)
+
+
 def get_user_move():
     guess = ()
     player = True
@@ -277,15 +339,22 @@ coordinates you wish to attack.")
     user_sizes = [2, 3, 3, 4, 5]
     comp_sizes = [2, 3, 3, 4, 5]
 
-    while len(USER_SHIPS) < 5:
-        ship = user_sizes.pop(0)
-        is_player = True
-        add_ships(ship, USER_SHIPS, is_player)
+    print("You may choose to place your ships or they will be randomly placed \
+on the board for you.")
+    user_placing = input("Place your own ships? yes or no: ").strip().lower()
 
     while len(COMP_SHIPS) < 5:
         ship = comp_sizes.pop(0)
         is_player = False
         add_ships(ship, COMP_SHIPS, is_player)
+
+    if user_placing in ("yes", "y"):
+        get_user_ship_position(USER_BOARD, user_sizes)
+    else:
+        while len(USER_SHIPS) < 5:
+            ship = user_sizes.pop(0)
+            is_player = True
+            add_ships(ship, USER_SHIPS, is_player)
 
     print_boards()
 
