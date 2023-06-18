@@ -86,6 +86,7 @@ def add_ships(ship, ships, is_player):
         col_letters = []
         row_nums = list(range(start, start + ship))
         col_nums = [randint(1, 10)] * ship
+        print("cols ", col_nums)
         for col in col_nums:
             col_letter = chr(col + 96)
             col_letters.append(col_letter)
@@ -127,10 +128,12 @@ def get_user_ship_position(board, user_sizes):
     col_nums = []
     col_letters = []
     for ship in user_sizes:
-        print(f"Placing a ship {ship} cells long.")
-        while True:
+        placed = False
+        while not placed:
+            print(f"Placing a ship {ship} cells long.")
+            print_boards()
             while True:
-                direction = input("Enter orientation - 'H' for horizontal or 'V' for vertical :").lower()
+                direction = input("Enter orientation - 'H' for horizontal or 'V' for vertical: ").lower()
                 if direction in ("h", "v"):
                     break
                 else:
@@ -150,38 +153,38 @@ def get_user_ship_position(board, user_sizes):
                 else:
                     print("Please enter a valid column letter.")
             if direction == "h":
-                if col_num + ship < 10:
-                    row_nums = row * ship
+                if col_num + ship < 11:
+                    row_nums = [row_num] * ship
+                    print(row_nums)
                     col_nums = list(range(col_num, col_num + ship))
                     for col in col_nums:
                         if board[row_num][col] == boat_icon:
                             print("There is already a ship in that position.")
                         else:
                             board[row_num][col] = boat_icon
-                            
+                            placed = True
                 else:
                     print("The ship does not fit in those coordinates. \
-                          Please enter a valid starting position for the ship.")
+                            Please enter a valid starting position for the ship.")
             else:
-                if row_num + ship < 10:
-                    row_nums = list(range(row, row + ship))
-                    col_nums = col * ship    
+                if row_num + ship < 11:
+                    row_nums = list(range(row_num, row_num + ship))
+                    col_nums = [col_num] * ship
+                    print(col_nums)
                     for row in row_nums:
                         if board[row][col_num] == boat_icon:
                             print("There is already a ship in that position.")
                         else:
                             board[row][col_num] = boat_icon
-                            
+                            placed = True
                 else:
-                    print("The ship does not fit in those coordinates. \
-                          Please enter a valid starting position for the ship.")
+                    print("The ship does not fit in those coordinates.")
+                    print("Please enter a valid starting position for the ship.")
         for col in col_nums:
             col_letter = chr(col + 96)
             col_letters.append(col_letter)
         coordinates = list(zip(row_nums, col_letters))
         USER_SHIPS.append(coordinates)
-        print_boards(board)
-        print(ship)
 
 
 def get_user_move():
