@@ -1,24 +1,26 @@
 """
 Battleships vs computer
 """
-
+import pyfiglet
+from helpers import helpers
 from random import randint
 
 
-class Style():
+class Colours():
     RED = "\033[31m"
     YELLOW = "\033[33m"
     BLUE = "\033[34m"
     GREY = "\033[37m"
     PURPLE = "\033[35m"
+    GREEN = "\033[32m"
     END = "\033[0m"
 
 
-sea_icon = f"{Style.BLUE}~{Style.END}"
-boat_icon = f"{Style.GREY}B{Style.END}"
-hit_icon = f"{Style.YELLOW}H{Style.END}"
-sunk_icon = f"{Style.RED}X{Style.END}"
-miss_icon = f"{Style.PURPLE}M{Style.END}"
+sea_icon = f"{Colours.BLUE}~{Colours.END}"
+boat_icon = f"{Colours.GREY}B{Colours.END}"
+hit_icon = f"{Colours.YELLOW}H{Colours.END}"
+sunk_icon = f"{Colours.RED}X{Colours.END}"
+miss_icon = f"{Colours.PURPLE}M{Colours.END}"
 
 
 COMP_BOARD = [[sea_icon] * 10 for x in range(10)]
@@ -190,8 +192,10 @@ def get_user_ship_position(board, user_sizes):
 def get_user_move():
     guess = ()
     player = True
-    print(f"The enemy has {len(COMP_SHIPS)} battleships remaining.", end=" ")
-    print(f"You have {len(USER_SHIPS)} battleships remaining.")
+    print("{:^40}".format(
+        f"The enemy has {len(COMP_SHIPS)} battleships remaining."), end=" ")
+    print("{:^48}".format(
+        f"You have {len(USER_SHIPS)} battleships remaining."))
     print("Enter the coordinates for your missile below!")
 
     while True:
@@ -217,7 +221,7 @@ def get_user_move():
         else:
             guess = ()
             print("You already tried that!")
-
+    helpers.clear_terminal()
     check_hit(guess, COMP_SHIPS, COMP_BOARD, player)
 
 
@@ -307,9 +311,9 @@ def check_hit(move, ships, board, player):
                 ships.remove(ship)
                 sunk = True
                 if player:
-                    print("You sunk a battleship!")
+                    print("{:^80}".format("You sunk a battleship!"))
                 else:
-                    print("You lost a battleship!")
+                    print("{:^80}".format("You lost a battleship!"))
             else:
                 ship.remove(move)
 
@@ -318,16 +322,16 @@ def check_hit(move, ships, board, player):
     col = ord(col_letter) - 97
 
     if player:
-        print("Your guess: ", move)
+        print("{:>40}".format("Your guess: "), move, end="")
     else:
-        print("Enemy move: ", move)
+        print("{:>40}".format("Enemy move: "), move, end="")
 
     if hit:
         board[row][col] = hit_icon
-        print("Hit!")
+        print(f" {Colours.GREEN}Hit!{Colours.END}")
     else:
         board[row][col] = miss_icon
-        print("Miss!")
+        print(f" {Colours.RED}Miss!{Colours.END}")
 
     if sunk:
         sink_ships(board)
@@ -341,7 +345,10 @@ def sink_ships(board):
 
 
 def start_game():
-    print("Welcome to Battleships!")
+    helpers.clear_terminal()
+    title = pyfiglet.figlet_format("BattleShips!", font="small")
+    print("Welcome to")
+    print(f"{Colours.GREEN}" + title + f"{Colours.END}")
     print("When prompted, enter the row number, then column letter for the "
           "coordinates you wish to attack.")
     print("Destroy all 5 of your enemy's ships to win!")
@@ -350,7 +357,7 @@ def start_game():
 
     print("You may choose to place your ships or they will be randomly placed "
           "on the board for you.")
-    user_placing = input("Place your own ships? yes or no: ").strip().lower()
+    user_placing = input("Place your own ships? Yes or no: ").strip().lower()
 
     while len(COMP_SHIPS) < 5:
         ship = comp_sizes.pop(0)
@@ -364,7 +371,7 @@ def start_game():
             ship = user_sizes.pop(0)
             is_player = True
             add_ships(ship, USER_SHIPS, is_player)
-
+    helpers.clear_terminal()
     print_boards()
 
 
