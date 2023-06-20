@@ -129,21 +129,21 @@ def check_guess(guess):
     GAME_VARS["guesses"] += guess
     if guess in GAME_VARS["word"]:
         GAME_VARS["correct"] += 1
-        print(f"Correct! {guess} is in the word!")
+        print("{:>40}".format(f"Correct! {guess} is in the word!"))
     else:
         GAME_VARS["lives"] -= 1
-        print(f"Wrong! {guess} is not in the word!")
+        print("{:>40}".format(f"Wrong! {guess} is not in the word!"))
 
 
 def print_word(guess):
-    print("The word: ", end="")
+    print("{:>34}".format("The word: "), end="")
     for letter in GAME_VARS["word"]:
         if letter in guess:
             print(letter, end="")
         else:
             print("_", end="")
     print("")
-    print("Your guesses: ", guess)
+    print("{:>38}".format("Your guesses: "), guess)
 
 
 def print_hangman():
@@ -169,6 +169,7 @@ def end_game():
         if user_choice not in ("yes", "no"):
             print("Please enter a real choice.")
         elif user_choice in ("yes", "y"):
+            clear_terminal()
             main()
         else:
             break
