@@ -2,18 +2,8 @@
 Battleships vs computer
 """
 import pyfiglet
-from helpers.helpers import clear_terminal, slowprint, get_input
+from helpers.helpers import clear_terminal, slowprint, get_input, Colours
 from random import randint
-
-
-class Colours():
-    RED = "\033[31m"
-    YELLOW = "\033[33m"
-    BLUE = "\033[34m"
-    GREY = "\033[37m"
-    PURPLE = "\033[35m"
-    GREEN = "\033[32m"
-    END = "\033[0m"
 
 
 sea_icon = f"{Colours.BLUE}~{Colours.END}"
@@ -345,15 +335,6 @@ def sink_ships(board):
 
 
 def start_game():
-    clear_terminal()
-    title = pyfiglet.figlet_format("BattleShips!", font="small")
-    slowprint("Welcome to\n")
-    print(f"{Colours.GREEN}" + title + f"{Colours.END}")
-    slowprint("When prompted, enter the row number, then column letter for "
-              "the coordinates you wish to attack.\n\n")
-    slowprint("Destroy all 5 of your enemy's ships to win!\n\n")
-    slowprint("You may choose to place your ships or they will be randomly "
-              "placed on the board for you.\n\n")
     user_placing = get_input("Place your own ships? Yes or no: ")
 
     user_sizes = [2, 3, 3, 4, 5]
@@ -381,6 +362,13 @@ def end_game():
     else:
         print("You sunk all their battleships!")
 
+    slowprint("Play again?")
+    choice = get_input("Yes or no: ")
+    if choice in ("yes", "y"):
+        main()
+    else:
+        slowprint("Goodbye!")
+
 
 def main():
     start_game()
@@ -389,3 +377,16 @@ def main():
         get_comp_move(USER_BOARD)
         print_boards()
     end_game()
+
+
+def intro():
+    clear_terminal()
+    title = pyfiglet.figlet_format("BattleShips!", font="small")
+    slowprint("Welcome to\n")
+    print(f"{Colours.GREEN}" + title + f"{Colours.END}")
+    slowprint("When prompted, enter the row number, then column letter for "
+              "the coordinates you wish to attack.\n\n")
+    slowprint("Destroy all 5 of your enemy's ships to win!\n\n")
+    slowprint("You may choose to place your ships or they will be randomly "
+              "placed on the board for you.\n\n")
+    main()
