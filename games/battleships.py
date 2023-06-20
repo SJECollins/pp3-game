@@ -2,7 +2,7 @@
 Battleships vs computer
 """
 import pyfiglet
-from helpers import helpers
+from helpers.helpers import clear_terminal, slowprint, get_input
 from random import randint
 
 
@@ -134,23 +134,23 @@ def get_user_ship_position(board, user_sizes):
             print(f"Placing a ship {ship} cells long.")
             print_boards()
             while True:
-                direction = input("Enter orientation - 'H' for horizontal "
-                                  "or 'V' for vertical: ").strip().lower()
+                direction = get_input("Enter orientation - 'H' for horizontal "
+                                      "or 'V' for vertical: ")
                 if direction in ("h", "v"):
                     break
                 else:
                     print("Please enter a valid orientation.")
             while True:
-                row = input("Enter the row number for the first cell of "
-                            "the ship: ").strip()
+                row = get_input("Enter the row number for the first cell of "
+                                "the ship: ")
                 if row in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
                     row_num = int(row) - 1
                     break
                 else:
                     print("Please enter a valid row number.")
             while True:
-                col = input("Enter the column letter for the first cell "
-                            "of the ship: ").strip().lower()
+                col = get_input("Enter the column letter for the first cell "
+                                "of the ship: ")
                 if col in ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
                     col_num = ord(col) - 97
                     break
@@ -200,7 +200,7 @@ def get_user_move():
 
     while True:
         while True:
-            row_num = input("Enter row number: ").strip()
+            row_num = get_input("Enter row number: ")
             if row_num not in (
               "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
                 print("Please enter a valid row number.")
@@ -209,7 +209,7 @@ def get_user_move():
                 guess = guess + (row, )
                 break
         while True:
-            col = input("Enter column letter: ").strip().lower()
+            col = get_input("Enter column letter: ")
             if col not in ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
                 print("Please enter a valid column letter.")
             else:
@@ -221,7 +221,7 @@ def get_user_move():
         else:
             guess = ()
             print("You already tried that!")
-    helpers.clear_terminal()
+    clear_terminal()
     check_hit(guess, COMP_SHIPS, COMP_BOARD, player)
 
 
@@ -345,19 +345,19 @@ def sink_ships(board):
 
 
 def start_game():
-    helpers.clear_terminal()
+    clear_terminal()
     title = pyfiglet.figlet_format("BattleShips!", font="small")
-    print("Welcome to")
+    slowprint("Welcome to\n")
     print(f"{Colours.GREEN}" + title + f"{Colours.END}")
-    print("When prompted, enter the row number, then column letter for the "
-          "coordinates you wish to attack.")
-    print("Destroy all 5 of your enemy's ships to win!")
+    slowprint("When prompted, enter the row number, then column letter for "
+              "the coordinates you wish to attack.\n\n")
+    slowprint("Destroy all 5 of your enemy's ships to win!\n\n")
+    slowprint("You may choose to place your ships or they will be randomly "
+              "placed on the board for you.\n\n")
+    user_placing = get_input("Place your own ships? Yes or no: ")
+
     user_sizes = [2, 3, 3, 4, 5]
     comp_sizes = [2, 3, 3, 4, 5]
-
-    print("You may choose to place your ships or they will be randomly placed "
-          "on the board for you.")
-    user_placing = input("Place your own ships? Yes or no: ").strip().lower()
 
     while len(COMP_SHIPS) < 5:
         ship = comp_sizes.pop(0)
@@ -371,7 +371,7 @@ def start_game():
             ship = user_sizes.pop(0)
             is_player = True
             add_ships(ship, USER_SHIPS, is_player)
-    helpers.clear_terminal()
+    clear_terminal()
     print_boards()
 
 
