@@ -32,20 +32,20 @@ COMP_MOVES = []
 
 
 def print_player(board):
-    print("             PLAYER", end="")
+    print("{:^40}".format("PLAYER"), end="")
     yield
-    print("      A B C D E F G H I J", end="")
+    print("{:^40}".format("A B C D E F G H I J"), end="")
     yield
-    ends = "    #===================#"
+    ends = "{:^40}".format("#===================#")
     print(ends, end="")
     yield
     num = 1
     for row in board:
         if num != 10:
-            print("%d   |%s|" % (num, "|".join(row)), end="")
+            print("%d           |%s|" % (num, "|".join(row)), end="")
             yield
         else:
-            print("%d  |%s|" % (num, "|".join(row)), end="")
+            print("%d          |%s|" % (num, "|".join(row)), end="")
             yield
         num += 1
     print(ends, end="")
@@ -53,15 +53,15 @@ def print_player(board):
 
 
 def print_comp(board):
-    print("      COMPUTER     ", end="")
+    print("{:^40}".format("COMPUTER"), end="")
     yield
-    print(" A B C D E F G H I J", end="")
+    print("{:^40}".format("A B C D E F G H I J"), end="")
     yield
-    ends = "#===================#"
+    ends = "{:^40}".format("#===================#")
     print(ends, end="")
     yield
     for row in board:
-        print("|%s|" % ("|".join(row)), end="")
+        print("{:^20}".format("  |%s|") % ("|".join(row)), end="")
         yield
     print(ends, end="")
     yield
@@ -86,7 +86,6 @@ def add_ships(ship, ships, is_player):
         col_letters = []
         row_nums = list(range(start, start + ship))
         col_nums = [randint(1, 10)] * ship
-        print("cols ", col_nums)
         for col in col_nums:
             col_letter = chr(col + 96)
             col_letters.append(col_letter)
@@ -133,20 +132,23 @@ def get_user_ship_position(board, user_sizes):
             print(f"Placing a ship {ship} cells long.")
             print_boards()
             while True:
-                direction = input("Enter orientation - 'H' for horizontal or 'V' for vertical: ").lower()
+                direction = input("Enter orientation - 'H' for horizontal "
+                                  "or 'V' for vertical: ").strip().lower()
                 if direction in ("h", "v"):
                     break
                 else:
                     print("Please enter a valid orientation.")
             while True:
-                row = input("Enter the row number for the first cell of the ship: ").strip()
+                row = input("Enter the row number for the first cell of "
+                            "the ship: ").strip()
                 if row in ("1", "2", "3", "4", "5", "6", "7", "8", "9", "10"):
                     row_num = int(row) - 1
                     break
                 else:
                     print("Please enter a valid row number.")
             while True:
-                col = input("Enter the column letter for the first cell of the ship: ").strip().lower()
+                col = input("Enter the column letter for the first cell "
+                            "of the ship: ").strip().lower()
                 if col in ("a", "b", "c", "d", "e", "f", "g", "h", "i", "j"):
                     col_num = ord(col) - 97
                     break
@@ -155,7 +157,6 @@ def get_user_ship_position(board, user_sizes):
             if direction == "h":
                 if col_num + ship < 11:
                     row_nums = [row_num] * ship
-                    print(row_nums)
                     col_nums = list(range(col_num, col_num + ship))
                     for col in col_nums:
                         if board[row_num][col] == boat_icon:
@@ -164,13 +165,12 @@ def get_user_ship_position(board, user_sizes):
                             board[row_num][col] = boat_icon
                             placed = True
                 else:
-                    print("The ship does not fit in those coordinates. \
-                            Please enter a valid starting position for the ship.")
+                    print("The ship does not fit in those coordinates."
+                          "Please enter a valid position for the ship.")
             else:
                 if row_num + ship < 11:
                     row_nums = list(range(row_num, row_num + ship))
                     col_nums = [col_num] * ship
-                    print(col_nums)
                     for row in row_nums:
                         if board[row][col_num] == boat_icon:
                             print("There is already a ship in that position.")
@@ -178,8 +178,8 @@ def get_user_ship_position(board, user_sizes):
                             board[row][col_num] = boat_icon
                             placed = True
                 else:
-                    print("The ship does not fit in those coordinates.")
-                    print("Please enter a valid starting position for the ship.")
+                    print("The ship does not fit in those coordinates."
+                          "Please enter a valid position for the ship.")
         for col in col_nums:
             col_letter = chr(col + 96)
             col_letters.append(col_letter)
@@ -232,39 +232,45 @@ def get_comp_move(board):
             for col in range(len(board[row])):
                 if board[row][col] == hit_icon:
                     if row < 8 and board[row + 1][col] == hit_icon:
-                        if row > 0 and board[row - 1][col] in (sea_icon, boat_icon):
+                        if (row > 0 and board[row - 1][col] in (
+                                sea_icon, boat_icon)):
                             row_num = row
                             col_num = col + 1
                             target = True
                             print("Target above")
                         break
                     elif col < 8 and board[row][col + 1] == hit_icon:
-                        if col > 0 and board[row][col - 1] in (sea_icon, boat_icon):
+                        if (col > 0 and board[row][col - 1] in (
+                                sea_icon, boat_icon)):
                             row_num = row + 1
                             col_num = col
                             target = True
                             print("Target left")
                             break
                         continue
-                    if row > 0 and board[row - 1][col] in (sea_icon, boat_icon):
+                    if (row > 0 and board[row - 1][col] in (
+                            sea_icon, boat_icon)):
                         row_num = row
                         col_num = col + 1
                         target = True
                         print("Target above")
                         break
-                    elif row < 8 and board[row + 1][col] in (sea_icon, boat_icon):
+                    elif (row < 8 and board[row + 1][col] in (
+                            sea_icon, boat_icon)):
                         row_num = row + 2
                         col_num = col + 1
                         target = True
                         print("Target below")
                         break
-                    elif col > 0 and board[row][col - 1] in (sea_icon, boat_icon):
+                    elif (col > 0 and board[row][col - 1] in (
+                            sea_icon, boat_icon)):
                         row_num = row + 1
                         col_num = col
                         target = True
                         print("Target left")
                         break
-                    elif col < 8 and board[row][col + 1] in (sea_icon, boat_icon):
+                    elif (col < 8 and board[row][col + 1] in (
+                            sea_icon, boat_icon)):
                         row_num = row + 1
                         col_num = col + 2
                         target = True
@@ -336,14 +342,14 @@ def sink_ships(board):
 
 def start_game():
     print("Welcome to Battleships!")
-    print("When prompted, enter the row number, then column letter for the \
-coordinates you wish to attack.")
+    print("When prompted, enter the row number, then column letter for the "
+          "coordinates you wish to attack.")
     print("Destroy all 5 of your enemy's ships to win!")
     user_sizes = [2, 3, 3, 4, 5]
     comp_sizes = [2, 3, 3, 4, 5]
 
-    print("You may choose to place your ships or they will be randomly placed \
-on the board for you.")
+    print("You may choose to place your ships or they will be randomly placed "
+          "on the board for you.")
     user_placing = input("Place your own ships? yes or no: ").strip().lower()
 
     while len(COMP_SHIPS) < 5:
