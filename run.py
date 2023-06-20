@@ -16,7 +16,7 @@ def run_game(choice):
     elif choice == 2:
         hangman.intro()
     elif choice == 3:
-        tictactoe.main()
+        tictactoe.intro()
     menu()
 
 

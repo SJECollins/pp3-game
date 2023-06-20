@@ -1,8 +1,9 @@
 """
 Maybe some tic tac toe??
 """
+import pyfiglet
 from random import randint
-from helpers.helpers import Colours, get_input, slowprint
+from helpers.helpers import Colours, get_input, slowprint, clear_terminal
 
 nought = f"{Colours.YELLOW}O{Colours.END}"
 cross = f"{Colours.RED}X{Colours.END}"
@@ -85,6 +86,31 @@ def is_full(board):
     return True
 
 
+def end_game(winner):
+    if winner == "human":
+        slowprint("You won!\n")
+    elif winner == "comp":
+        slowprint("The computer won!\n")
+    elif winner == "none":
+        slowprint("It's a tie!\n")
+    while True:
+        play_again = get_input("Play again? Yes or no: ")
+        if play_again in ("yes", "y"):
+            return main()
+        elif play_again == "no":
+            break
+        else:
+            print("Please choose yes or no.")
+
+
+def intro():
+    clear_terminal()
+    title = pyfiglet.figlet_format(("Tic Tac Toe!").center(40), font="small")
+    slowprint("Welcome to\n")
+    print(f"{Colours.PURPLE}" + title + f"{Colours.END}")
+    main()
+
+
 def main():
     BOARD = [[" "] * 3 for x in range(3)]
     print_board(BOARD)
@@ -122,4 +148,12 @@ def main():
             slowprint("Your turn... \n")
             row, col = get_user_move(BOARD)
             BOARD[row][col]
+        clear_terminal()
         print_board(BOARD)
+    
+    if check_win(BOARD, human):
+        end_game(winner="human")
+    elif check_win(BOARD, comp):
+        end_game(winner="comp")
+    elif is_full(BOARD):
+        end_game(winner="none")
