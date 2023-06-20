@@ -4,11 +4,20 @@ import time
 
 
 def clear_terminal():
+    """
+    Function to clear terminal
+    """
     os.system("clear")
 
 
-def slowprint(text):
-    for letter in text:
+def slowprint(message):
+    """
+    Function to slowly print to terminal
+
+    Args:
+        message - message to print to screen with delay between letters
+    """
+    for letter in message:
         sys.stdout.write(letter)
         sys.stdout.flush()
         time.sleep(0.05)
