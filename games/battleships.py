@@ -2,8 +2,8 @@
 Battleships vs computer
 """
 import pyfiglet
-from helpers.helpers import clear_terminal, slowprint, get_input, Colours
 from random import randint
+from helpers.helpers import clear_terminal, slowprint, get_input, Colours
 
 
 sea_icon = f"{Colours.BLUE}~{Colours.END}"

@@ -40,13 +40,24 @@ Added a parent while loop for inputs and an if statement to check whether the mo
 ### Endgame
 End game conditions are simple, updated while loop in main() to only run while user AND computer ships are above 0. Once one or the other reaches 0, the loop breaks and we go to our end_game() function.
 
-## Coloured board
+### Coloured board
 Updated the board to print in colour using simple [ANSI colour codes](https://en.wikipedia.org/wiki/ANSI_escape_code). Created a basic class with the colour codes, may build on that...
 
-## Computer moves
+### Computer moves
 Updated the get_comp_move() function to first check the player's board for hit_icons indicating that it's already hit a boat (also now the hit_icons change to sunk_icons when a boat is sunk on either board, so the computer can differentiate - it can't read the "You sunk a battleship!" message after all (also, have changed from simple characters to [object]_icons on the boards due to the colours (alot of alsos))). So, if a hit_icon exists on the board, the computer will check if a hit_icon also exists below or to the right and if so will see if it can it above or to the left (because it will have passed those on its way to the hit_icon), that way it can also work backwards from a hit in a semi-intelligent way following the right direction. Otherwise, it'll try whatever cell is available to hit around a long hit_icon.
 
 There's probably a smarter way to do it, but it's my day off. Also, should probably think about what is the smartest pattern to follow when the computer doesn't have a hit_icon to focus on because right now it just shoots randomly.
 
-## Placing ships
+### Placing ships
 So just a quick thing, but added an option for user to place their own ships. A frankenstein of while loops for input, with copies of pieces of existing code to check if the boat fits or overlaps and then print it to the board. Nothing fancy. Could be refactored.
+
+
+## Hangman
+Not really based on anything. Nothing too complicated, almost half the file is made of the strings for the man.
+
+### Getting the word
+Using [Random word API](https://random-word-api.herokuapp.com/home), a handy Heroku app, we get a random word. The get_word() function also checks if the word is more than ten letters - to avoid anything too ridiculous - and calls itself (RECURSION OH NO!) if so.
+
+## Checking for a win
+The only other new thing here is the use of the [all()](https://www.w3schools.com/python/ref_func_all.asp) function in our check_win(). all() returns True if all the elements in an iterable are True, so here we're setting the "won" variable to true if all the letters in the word are in our guesses.
+
