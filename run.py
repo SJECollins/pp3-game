@@ -18,7 +18,7 @@ def run_game(choice):
     elif choice == 3:
         tictactoe.intro()
     elif choice == 4:
-        connectfour.main()
+        connectfour.intro()
     elif choice == 5:
         hideseek.main()
     menu()

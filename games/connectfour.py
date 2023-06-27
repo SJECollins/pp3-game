@@ -1,8 +1,9 @@
 """
 Connect 4 is basically just bigger tic tac toe, right?
 """
+import pyfiglet
 from random import randint
-from helpers.helpers import Colours, get_input
+from helpers.helpers import Colours, get_input, slowprint, clear_terminal
 
 player_one = f"{Colours.YELLOW}\u2B24{Colours.END}"
 player_two = f"{Colours.RED}\u2B24{Colours.END}"
@@ -46,7 +47,6 @@ def get_user_move(board):
 
 
 def get_comp_move(board, comp):
-    print("comp")
     comp_col = 0
     comp_row = 0
     target = False
@@ -57,61 +57,60 @@ def get_comp_move(board, comp):
                 if (row > 0 and board[row - 1][col] == space):
                     target = True
                     comp_col = col
-                    print("above")
                     break
                 # Check right, go left
                 if (0 < col < 6 and board[row][col + 1] == comp
                         and board[row][col - 1] == space):
-                    if (row == 5) or (row > 0 and board[row + 1][col - 1] != space):
+                    if (row == 5) or (row > 0
+                                      and board[row + 1][col - 1] != space):
                         target = True
                         comp_col = col - 1
-                        print("left")
                         break
                 # Go left
                 if (col > 0 and board[row][col - 1] == space):
-                    if (row == 5) or (row > 0 and board[row + 1][col - 1] == space):
+                    if (row == 5) or (row > 0
+                                      and board[row + 1][col - 1] == space):
                         target = True
                         comp_col = col - 1
-                        print("left")
                         break
                 # Go right
                 if (col < 6 and board[row][col + 1] == space):
-                    if (row == 5) or (row > 0 and board[row + 1][col + 1] != space):
+                    if (row == 5) or (row > 0
+                                      and board[row + 1][col + 1] != space):
                         target = True
                         comp_col = col + 1
-                        print("right")
                         break
                 # Check below left, go above right
-                if (0 < row < 5 and 0 < col < 6 and board[row + 1][col - 1] == comp
+                if (0 < row < 5 and 0 < col < 6
+                        and board[row + 1][col - 1] == comp
                         and board[row][col + 1] != space
                         and board[row - 1][col + 1] == space):
                     target = True
                     comp_col = col + 1
-                    print("above right")
                     break
                 # Check below right, go above left
-                if (0 < row < 5 and 0 < col < 6 and board[row + 1][col + 1] == comp
+                if (0 < row < 5 and 0 < col < 6
+                        and board[row + 1][col + 1] == comp
                         and board[row][col - 1] != space
                         and board[row - 1][col - 1] == space):
                     target = True
                     comp_col = col - 1
-                    print("above left")
                     break
                 # Go below left
-                if (0 <= row < 4 and 0 < col < 6 and board[row + 1][col - 1] == space
+                if (0 <= row < 4 and 0 < col < 6
+                        and board[row + 1][col - 1] == space
                         and board[row + 2][col - 1] != space):
                     target = True
                     comp_col = col - 1
-                    print("below left")
                     break
                 # Go below right
-                if (0 <= row < 4 and 0 < col < 6 and board[row + 1][col + 1] == space
+                if (0 <= row < 4 and 0 < col < 6
+                        and board[row + 1][col + 1] == space
                         and board[row + 2][col - 1] != space):
                     target = True
                     comp_col = col + 1
-                    print("Below right")
                     break
-                
+
         if target:
             row = 5
             while (row >= 0):
@@ -120,9 +119,7 @@ def get_comp_move(board, comp):
                     move = comp_row, comp_col
                     return move
                 row -= 1
-        print("end of loop?")
     if not target:
-        print("get random")
         while True:
             comp_col = randint(0, 6)
             row = 5
@@ -152,11 +149,44 @@ def check_win(board, player):
                     == player):
                 return True
     for col in range(4):
-        for row in range(3):
+        for row in range(6):
             if (board[row][col] == board[row - 1][col + 1]
                     == board[row - 2][col + 2] == board[row - 3][col + 3]
                     == player):
                 return True
+
+
+def is_full(board):
+    for row in board:
+        for col in row:
+            if col == space:
+                return False
+    return True
+
+
+def end_game(winner):
+    if winner == "human":
+        print("You won!")
+    elif winner == "comp":
+        print("The computer won!")
+    elif winner == "none":
+        print("It's a tie!")
+    while True:
+        play_again = get_input("Play again? Yes or no: ")
+        if play_again in ("yes", "y"):
+            return main()
+        elif play_again == "no":
+            break
+        else:
+            print("Please choose yes or no.")
+
+
+def intro():
+    clear_terminal()
+    title = pyfiglet.figlet_format(("Connect4").center(40), font="small")
+    slowprint("Welcome to\n")
+    print(f"{Colours.BLUE}" + title + f"{Colours.END}")
+    main()
 
 
 def main():
@@ -177,17 +207,38 @@ def main():
         human = player_two
         comp = player_one
 
-    while not check_win(BOARD, human):
+    while (not is_full(BOARD) and not check_win(BOARD, human)
+            and not check_win(BOARD, comp)):
         if human == player_one:
+            slowprint("Your turn... \n")
             row, col = get_user_move(BOARD)
             BOARD[row][col] = human
+            clear_terminal()
             print_board(BOARD)
+            if (is_full(BOARD) or check_win(BOARD, human)
+                    or check_win(BOARD, comp)):
+                break
+            slowprint("Computer's turn... \n")
             row, col = get_comp_move(BOARD, comp)
             BOARD[row][col] = comp
         else:
+            slowprint("Computer's turn... \n")
             row, col = get_comp_move(BOARD, comp)
             BOARD[row][col] = comp
+            clear_terminal()
+            print_board(BOARD)
+            if (is_full(BOARD) or check_win(BOARD, comp)
+                    or check_win(BOARD, human)):
+                break
+            slowprint("Your turn... \n")
             row, col = get_user_move(BOARD)
-            BOARD[row][col]
+            BOARD[row][col] = human
+        clear_terminal()
         print_board(BOARD)
 
+    if check_win(BOARD, human):
+        end_game(winner="human")
+    elif check_win(BOARD, comp):
+        end_game(winner="comp")
+    elif is_full(BOARD):
+        end_game(winner="none")
