@@ -24,20 +24,20 @@ COMP_MOVES = []
 
 
 def print_player(board):
-    print("{:^40}".format("PLAYER"), end="")
+    print("{:^36}".format("PLAYER"), end="")
     yield
-    print("{:^40}".format("A B C D E F G H I J"), end="")
+    print("{:^36}".format("A B C D E F G H I J"), end="")
     yield
-    ends = "{:^40}".format("#===================#")
+    ends = "{:^36}".format("#===================#")
     print(ends, end="")
     yield
     num = 1
     for row in board:
         if num != 10:
-            print("%d           |%s|" % (num, "|".join(row)), end="")
+            print("%d         |%s|" % (num, "|".join(row)), end="")
             yield
         else:
-            print("%d          |%s|" % (num, "|".join(row)), end="")
+            print("%d        |%s|" % (num, "|".join(row)), end="")
             yield
         num += 1
     print(ends, end="")
@@ -45,15 +45,15 @@ def print_player(board):
 
 
 def print_comp(board):
-    print("{:^40}".format("COMPUTER"), end="")
+    print("{:^36}".format("COMPUTER"), end="")
     yield
-    print("{:^40}".format("A B C D E F G H I J"), end="")
+    print("{:^36}".format("A B C D E F G H I J"), end="")
     yield
-    ends = "{:^40}".format("#===================#")
+    ends = "{:^36}".format("#===================#")
     print(ends, end="")
     yield
     for row in board:
-        print("{:^20}".format("  |%s|") % ("|".join(row)), end="")
+        print("{:^16}".format("  |%s|") % ("|".join(row)), end="")
         yield
     print(ends, end="")
     yield
@@ -184,7 +184,7 @@ def get_user_move():
     player = True
     print("{:^40}".format(
         f"The enemy has {len(COMP_SHIPS)} battleships remaining."), end=" ")
-    print("{:^48}".format(
+    print("{:^40}".format(
         f"You have {len(USER_SHIPS)} battleships remaining."))
     print("Enter the coordinates for your missile below!")
 
@@ -301,9 +301,9 @@ def check_hit(move, ships, board, player):
                 ships.remove(ship)
                 sunk = True
                 if player:
-                    print("{:^80}".format("You sunk a battleship!"))
+                    print("{:^79}".format("You sunk a battleship!"))
                 else:
-                    print("{:^80}".format("You lost a battleship!"))
+                    print("{:^79}".format("You lost a battleship!"))
             else:
                 ship.remove(move)
 
@@ -312,9 +312,9 @@ def check_hit(move, ships, board, player):
     col = ord(col_letter) - 97
 
     if player:
-        print("{:>40}".format("Your guess: "), move, end="")
+        print("{:>36}".format("Your guess: "), move, end="")
     else:
-        print("{:>40}".format("Enemy move: "), move, end="")
+        print("{:>36}".format("Enemy move: "), move, end="")
 
     if hit:
         board[row][col] = hit_icon
@@ -381,7 +381,7 @@ def main():
 
 def intro():
     clear_terminal()
-    title = pyfiglet.figlet_format("BattleShips!", font="small")
+    title = pyfiglet.figlet_format(("BattleShips!").center(40), font="small")
     slowprint("Welcome to\n")
     print(f"{Colours.GREEN}" + title + f"{Colours.END}")
     slowprint("When prompted, enter the row number, then column letter for "

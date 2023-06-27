@@ -150,7 +150,7 @@ def main():
             BOARD[row][col]
         clear_terminal()
         print_board(BOARD)
-    
+
     if check_win(BOARD, human):
         end_game(winner="human")
     elif check_win(BOARD, comp):

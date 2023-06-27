@@ -196,8 +196,9 @@ def main():
 
 
 def intro():
+    clear_terminal()
     slowprint("Let's play \n")
-    title = pyfiglet.figlet_format("HANGMAN", font="small")
+    title = pyfiglet.figlet_format(("HANGMAN").center(40), font="small")
     print(f"{Colours.RED}" + title + f"{Colours.END}")
     slowprint("Guess one letter at a time.\nSave the man.")
     main()
