@@ -1,5 +1,7 @@
 # Python Terminal Game
 
+[Live site](https://python-arc-77d6ccc20a34.herokuapp.com/)
+
 ## Battleship
 
 Based on [gbrough's battleship repo](https://github.com/gbrough/battleship)
