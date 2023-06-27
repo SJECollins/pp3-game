@@ -60,22 +60,29 @@ def get_comp_move(board, comp):
                     print("above")
                     break
                 # Check right, go left
-                if (col > 0 and board[row][col + 1] == comp
-                        and board[row][col - 1] == space
-                        and board[row + 1][col - 1] != space):
-                    target = True
-                    comp_col = col - 1
-                    print("left")
-                    break
+                if (0 < col < 6 and board[row][col + 1] == comp
+                        and board[row][col - 1] == space):
+                    if (row == 5) or (row > 0 and board[row + 1][col - 1] != space):
+                        target = True
+                        comp_col = col - 1
+                        print("left")
+                        break
+                # Go left
+                if (col > 0 and board[row][col - 1] == space):
+                    if (row == 5) or (row > 0 and board[row + 1][col - 1] == space):
+                        target = True
+                        comp_col = col - 1
+                        print("left")
+                        break
                 # Go right
-                if (col < 7 and board[row][col + 1] == space
-                        and board[row + 1][col + 1] != space):
-                    target = True
-                    comp_col = col + 1
-                    print("right")
-                    break
+                if (col < 6 and board[row][col + 1] == space):
+                    if (row == 5) or (row > 0 and board[row + 1][col + 1] != space):
+                        target = True
+                        comp_col = col + 1
+                        print("right")
+                        break
                 # Check below left, go above right
-                if (row > 0 and col < 7 and board[row + 1][col - 1] == comp
+                if (0 < row < 5 and 0 < col < 6 and board[row + 1][col - 1] == comp
                         and board[row][col + 1] != space
                         and board[row - 1][col + 1] == space):
                     target = True
@@ -83,7 +90,7 @@ def get_comp_move(board, comp):
                     print("above right")
                     break
                 # Check below right, go above left
-                if (row > 0 and col > 0 and board[row + 1][col + 1] == comp
+                if (0 < row < 5 and 0 < col < 6 and board[row + 1][col + 1] == comp
                         and board[row][col - 1] != space
                         and board[row - 1][col - 1] == space):
                     target = True
@@ -91,15 +98,14 @@ def get_comp_move(board, comp):
                     print("above left")
                     break
                 # Go below left
-                if (col > 0 and board[row + 1][col - 1] == space
+                if (0 <= row < 4 and 0 < col < 6 and board[row + 1][col - 1] == space
                         and board[row + 2][col - 1] != space):
                     target = True
                     comp_col = col - 1
                     print("below left")
                     break
-                
                 # Go below right
-                if (col < 7 and board[row + 1][col + 1] == space
+                if (0 <= row < 4 and 0 < col < 6 and board[row + 1][col + 1] == space
                         and board[row + 2][col - 1] != space):
                     target = True
                     comp_col = col + 1
