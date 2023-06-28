@@ -7,7 +7,7 @@ Handle menu/game choice (in case we want more games)
 import pyfiglet
 
 # Import game
-from games import battleships, hangman, tictactoe, hideseek, connectfour
+from games import battleships, hangman, tictactoe, hideseek, connectfour, quiz
 
 
 def run_game(choice):
@@ -21,6 +21,8 @@ def run_game(choice):
         connectfour.intro()
     elif choice == 5:
         hideseek.main()
+    elif choice == 6:
+        quiz.intro()
     menu()
 
 
@@ -36,10 +38,11 @@ def menu():
     print("[3] Tic Tac Toe")
     print("[4] Connect 4")
     print("[5] Hide & Seek - a text adventure")
+    print("[6] Pixel's Quiz")
     while True:
         user_choice = input(
             "\nEnter the number of the game you want to play: ").strip()
-        if user_choice not in ("1", "2", "3", "4"):
+        if user_choice not in ("1", "2", "3", "4", "5", "6"):
             print("Please enter a valid number.")
         else:
             choice = int(user_choice)
